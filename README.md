@@ -17,7 +17,7 @@ Y muchos otros recursos que se agregarán con el tiempo.
 
 📚 Estudia, practica y comparte. Este repositorio busca ser una herramienta colaborativa para todos aquellos que buscan aprender y dominar los conceptos de "Program III". ¡Disfruta y aprovecha al máximo!
 
-¡Espero que te sirva! Adapta o cambia lo que consideres necesario para que se ajuste mejor a tus necesidades. ¡Buena suerte con tu repositorio en GitHub!
+¡Espero que te sirva! 
 
 
 
