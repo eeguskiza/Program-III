@@ -1,5 +1,8 @@
 package ClasesBasicas;
-public class Resultado {
+
+import java.util.List;
+
+public class Resultado extends DatoTabular {
     private int año;
     private String torneo;
     private String ganador;
@@ -11,7 +14,9 @@ public class Resultado {
     private String resultadoFinal;
 
 
-    public Resultado(int año, String torneo, String ganador, int rankingGanador, String nacionalidadGanador, String subcampeon, int rankingSubcampeon, String nacionalidadSubcampeon, String resultadoFinal) {
+    public Resultado(int año, String torneo, String ganador, int rankingGanador, String nacionalidadGanador, String subcampeon, int rankingSubcampeon, String nacionalidadSubcampeon, String resultadoFinal, List<String> cabeceras) {
+        
+        super(cabeceras);
         this.año = año;
         this.torneo = torneo;
         this.ganador = ganador;
@@ -21,6 +26,16 @@ public class Resultado {
         this.rankingSubcampeon = rankingSubcampeon;
         this.nacionalidadSubcampeon = nacionalidadSubcampeon;
         this.resultadoFinal = resultadoFinal;
+
+        valores.add(año);
+		valores.add(torneo);
+		valores.add(ganador);
+		valores.add(rankingGanador);
+		valores.add(nacionalidadGanador);
+		valores.add(subcampeon);
+		valores.add(rankingSubcampeon);
+		valores.add(nacionalidadSubcampeon);
+		valores.add(resultadoFinal);
     }
 
     public String getTorneo() {

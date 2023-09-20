@@ -9,14 +9,24 @@ import ClasesBasicas.*;
 public class HistoriaGrandSlams {
     private List<Resultado> resultados;
     private Map<String, Torneo> torneosPorNombre;
-    private Map<Integer, Torneo> torneosPorCodigo;
-    private Map<String, Tenista> tenistas;
+    private Map<String, Torneo> torneosPorCodigo;
+    private Map<String, Tenista> tenistasPorNombre;
 
-    public HistoriaGrandSlams() {
-        resultados = new ArrayList<>();
-        torneosPorNombre = new HashMap<>();
-        torneosPorCodigo = new HashMap<>();
-        tenistas = new HashMap<>();
+    public HistoriaGrandSlams(List<Tenista> tenistas, List<Torneo> torneos, List<Resultado> resultados) {
+        super();
+		this.resultados = resultados;
+		this.torneosPorNombre = new HashMap<>();
+		this.torneosPorCodigo = new HashMap<>();
+		this.tenistasPorNombre = new HashMap<>();
+		
+		//Logica para rellenar los hashmaps con la info de las listas
+		for(Torneo t : torneos) {
+			this.torneosPorNombre.put(t.getNombre(), t);
+			this.torneosPorCodigo.put(t.getCodigo(), t);
+		}
+		for(Tenista t: tenistas) {
+			this.tenistasPorNombre.put(t.getNombre(), t);
+		}
     }
 
     // Método para cargar los datos desde ficheros CSV, por ejemplo.

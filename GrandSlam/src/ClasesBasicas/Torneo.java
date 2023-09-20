@@ -1,16 +1,25 @@
 package ClasesBasicas;
-public class Torneo {
-    private int codigo;
+
+import java.util.List;
+
+public class Torneo extends DatoTabular {
+    private String codigo;
     private String nombre;
     private String ciudad;
 
-    public Torneo(int codigo, String nombre, String ciudad) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.ciudad = ciudad;
-    }
+    public Torneo(String codigo, String nombre, String ciudad, List<String> cabeceras) {
+		super(cabeceras);
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.ciudad = ciudad;
+		
+		//lista de valores
+		valores.add(codigo);
+		valores.add(nombre);
+		valores.add(ciudad);
+	}
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
@@ -22,7 +31,7 @@ public class Torneo {
         return ciudad;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
