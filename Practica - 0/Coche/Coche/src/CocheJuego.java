@@ -2,8 +2,9 @@ public class CocheJuego extends Coche{
 	private LabelCoche coche;
 	
 	public CocheJuego() {
-		coche = new LabelCoche("coche.png");
-	}
+        coche = new LabelCoche("/Users/erikeguskiza/Documents/Program III/Practica - 0/Coche/Coche/coche.png");
+        System.out.println("Image file path: " + getClass().getResource("coche.png"));
+    }
 
 	public LabelCoche getCoche() {
 		return coche;
