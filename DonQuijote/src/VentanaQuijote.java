@@ -1,74 +1,90 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.Scanner;
 
-import javax.swing.*;
+public class VentanaQuijote extends JFrame implements ActionListener {
+    private JTextArea areaTexto;
+    private JButton btnPaginaArriba, btnPaginaAbajo;
+    private JScrollPane scrollPane;
+    private JPanel panelBotones;
 
-/** Ejercicio de hilos  con ventanas. Esta clase carga el texto del Quijote en un área de texto,
- * y permite navegar por el área con la scrollbar y con botones de página arriba y página abajo.
- * 1. Modificarlo para que al pulsar los botones el scroll se haga con una animación 
- * a lo largo de un segundo, en lugar de en forma inmediata.
- * 2. Prueba a pulsar muy rápido varias páginas abajo. ¿Cómo lo arreglarías para que el scroll
- * en ese caso funcione bien y vaya bajando una página tras otra pero las baje *completas*?
- * @author andoni.eguiluz @ ingenieria.deusto.es
- */
-public class VentanaQuijote extends JFrame {
+    public VentanaQuijote() {
+        super("Don Quijote de la Mancha");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	private JTextArea taTexto;
-	private JScrollPane spTexto;
-	
-	public VentanaQuijote() {
-		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-		setTitle( "Don Quijote de la Mancha" );
-		setSize( 800, 600 );
-		setLocationRelativeTo( null );  // Pone la ventana relativa a la pantalla
-		taTexto = new JTextArea();
-		spTexto = new JScrollPane( taTexto );
-		add( spTexto, BorderLayout.CENTER );
-		JPanel pBotonera = new JPanel();
-		JButton bPagArriba = new JButton( "^" );
-		JButton bPagAbajo = new JButton( "v" );
-		pBotonera.add( bPagArriba );
-		pBotonera.add( bPagAbajo );
-		add( pBotonera, BorderLayout.SOUTH );
-		bPagArriba.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				muevePagina( -(spTexto.getHeight()-20) );
-			}
-		});
-		bPagAbajo.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				muevePagina( (spTexto.getHeight()-20) );
-			}
-		});
-	}
-	
-	private void muevePagina( int pixelsVertical ) {
-		// TODO Cambiar este comportamiento de acuerdo a los comentarios de la cabecera de clase
-		JScrollBar bVertical = spTexto.getVerticalScrollBar();
-		System.out.println( "Moviendo texto de " + bVertical.getValue() + " a " + (bVertical.getValue()+pixelsVertical) );
-		bVertical.setValue( bVertical.getValue() + pixelsVertical );
-	}
-	
-	private void cargaQuijote() {
-		try {
-			Scanner scanner = new Scanner( VentanaQuijote.class.getResourceAsStream( "DonQuijote.txt" ), "UTF-8" );
-			while (scanner.hasNextLine()) {
-				String linea = scanner.nextLine();
-				taTexto.append( linea + "\n" );
-			}
-			scanner.close();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog( this, "No se ha podido cargar el texto" );
-		}
-	}
+        areaTexto = new JTextArea();
+        areaTexto.setEditable(false);
+        areaTexto.setLineWrap(true);
+        areaTexto.setWrapStyleWord(true);
 
+        scrollPane = new JScrollPane(areaTexto);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        btnPaginaArriba = new JButton("^");
+        btnPaginaArriba.addActionListener(this);
+
+        btnPaginaAbajo = new JButton("v");
+        btnPaginaAbajo.addActionListener(this);
+
+        panelBotones = new JPanel();
+        panelBotones.setLayout(new GridLayout(1, 2));
+        panelBotones.add(btnPaginaArriba);
+        panelBotones.add(btnPaginaAbajo);
+
+        add(scrollPane, BorderLayout.CENTER);
+        add(panelBotones, BorderLayout.SOUTH);
+
+        setSize(600, 400);
+        setVisible(true);
+
+        cargarTexto();
+    }
+
+    private void cargarTexto() {
+    String texto = "";
+    try {
+        File file = new File("/Users/erikeguskiza/Documents/Program III/DonQuijote/src/DonQuijote.txt");
+        Scanner scanner = new Scanner(file, "UTF-8");
+        texto = scanner.useDelimiter("\\A").next();
+        scanner.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    areaTexto.setText(texto);
+}
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnPaginaArriba) {
+            int currentPos = scrollPane.getVerticalScrollBar().getValue();
+            final int newPos = currentPos - scrollPane.getViewport().getHeight();
+            int maxPos = scrollPane.getVerticalScrollBar().getMaximum();
+            final Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    scrollPane.getVerticalScrollBar().setValue(newPos);
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+        } else if (e.getSource() == btnPaginaAbajo) {
+            int currentPos = scrollPane.getVerticalScrollBar().getValue();
+            final int newPos = currentPos + scrollPane.getViewport().getHeight();
+            int maxPos = scrollPane.getVerticalScrollBar().getMaximum();
+            final Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    scrollPane.getVerticalScrollBar().setValue(newPos);
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+        }
+    }
 	public static void main(String[] args) {
 		VentanaQuijote v = new VentanaQuijote();
 		v.setVisible( true );
-		v.cargaQuijote();
+		v.cargarTexto();
 	}
-
 }
