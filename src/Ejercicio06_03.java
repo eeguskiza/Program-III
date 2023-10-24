@@ -18,7 +18,7 @@ public class Ejercicio06_03 {
 		ventana.setLocationRelativeTo( null );
 		ventana.setSize( 200, 80 );
 
-		JButton bCargaMunicipios = new JButton( "Carga municipios > 200k" );
+		JButton bCargaMunicipios = new JButton( "Cargar municipios" );
 		ventana.add( bCargaMunicipios );
 		
 		bCargaMunicipios.addActionListener( new ActionListener() {

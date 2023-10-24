@@ -3,17 +3,29 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.HashMap;
+
 
 @SuppressWarnings("serial")
 public class VentanaTablaDatos extends JFrame {
 
-	private static final int COL_AUTONOMIA = 4;
+	private static final int COL_AUTONOMIA = 6;
 	
 	private JTable tablaDatos;
 	private DataSetMunicipios datosMunis;
 	// private DatasetParaJTable modeloDatos;  El propio dataset es también modelo de datos, no hace falta diferenciarlos
 
 	private String autonomiaSeleccionada = "";
+
+	private JLabel lblMensaje = new JLabel(""); // Parte superior
+	private JTree arbol = new JTree(); // Parte izquierda
+	private DefaultTreeModel modeloArbol; // Modelo del árbol
+	private JPanel pnlVisualizacion = new JPanel(); // Parte derecha
+	private JButton btnInsertar = new JButton("Insertar");
+	private JButton btnBorrar = new JButton("Borrar");
+	private JButton btnOrden = new JButton("Orden"); // Parte inferior
 	
 	public VentanaTablaDatos( JFrame ventOrigen ) {
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
@@ -56,13 +68,34 @@ public class VentanaTablaDatos extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int filaSel = tablaDatos.getSelectedRow();
 				if (filaSel>=0) {
-					datosMunis.anyadeFila( filaSel, new Municipio( datosMunis.getListaMunicipios().size()+1, "Nombre", 0, "Provincia", "Autonomía" ) );
+					datosMunis.anyadeFila( filaSel, new Municipio( datosMunis.getListaMunicipios().size()+1, "Nombre", 0, "Provincia", "Autonomía" , 0, 0) );
 				}
 			}
 		});
-		
+
+		// Configuración de la nueva interfaz:
+		// Parte superior
+		add(lblMensaje, BorderLayout.NORTH);
+
+		// Parte izquierda
+		JScrollPane spArbol = new JScrollPane(arbol);
+		add(spArbol, BorderLayout.WEST);
+
+		// Parte central (donde estaba tu tabla antes)
+		JScrollPane spTabla = new JScrollPane(tablaDatos);
+		add(spTabla, BorderLayout.CENTER);
+
+		// Parte derecha
+		add(pnlVisualizacion, BorderLayout.EAST);
+
+		// Parte inferior
+		JPanel pnlInferior = new JPanel(); // Este panel ya estaba definido en tu código, solo añado los nuevos botones
+		pnlInferior.add(btnInsertar);
+		pnlInferior.add(btnBorrar);
+		pnlInferior.add(btnOrden);
+		add(pnlInferior, BorderLayout.SOUTH);
 	}
-	
+
 	public void setDatos( DataSetMunicipios datosMunis ) {
 		this.datosMunis = datosMunis;
 		tablaDatos.setModel( datosMunis );
@@ -168,7 +201,39 @@ public class VentanaTablaDatos extends JFrame {
 				}
 			}
 		});
-		
+		cargarArbol();
 	}
-	
+
+	private void cargarArbol() {
+		// Nodo raíz
+		DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Municipios");
+
+		// Hashmaps para gestionar nodos de comunidades y provincias
+		HashMap<String, DefaultMutableTreeNode> comunidades = new HashMap<>();
+		HashMap<String, DefaultMutableTreeNode> provincias = new HashMap<>();
+
+		for (Municipio muni : datosMunis.getListaMunicipios()) {
+			// Añadir nodo de comunidad si no existe
+			if (!comunidades.containsKey(muni.getAutonomia())) {
+				DefaultMutableTreeNode nodoComunidad = new DefaultMutableTreeNode(muni.getAutonomia());
+				comunidades.put(muni.getAutonomia(), nodoComunidad);
+				raiz.add(nodoComunidad);
+			}
+
+			// Añadir nodo de provincia si no existe
+			String claveProvincia = muni.getAutonomia() + "-" + muni.getProvincia();
+			if (!provincias.containsKey(claveProvincia)) {
+				DefaultMutableTreeNode nodoProvincia = new DefaultMutableTreeNode(muni.getProvincia());
+				provincias.put(claveProvincia, nodoProvincia);
+				comunidades.get(muni.getAutonomia()).add(nodoProvincia);
+			}
+		}
+
+		// Asignar el modelo al JTree
+		modeloArbol = new DefaultTreeModel(raiz);
+		arbol.setModel(modeloArbol);
+		arbol.setEditable(false); // El JTree no es editable
+	}
+
+
 }

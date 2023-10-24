@@ -11,7 +11,7 @@ public class DataSetMunicipios extends DatasetParaJTable {
 	 * @throws IOException	Si hay error en la lectura del fichero
 	 */
 	public DataSetMunicipios( String nombreFichero ) throws IOException {
-		super( new Municipio( 0, "", 0, "", "" ) );
+		super( new Municipio( 0, "", 0, "", "" , 0, 0) );
 		File ficMunicipios = new File( nombreFichero );
 		Scanner lecturaFic = null;
 		if (ficMunicipios.exists()) {
@@ -30,7 +30,9 @@ public class DataSetMunicipios extends DatasetParaJTable {
 				int habitantes = Integer.parseInt( partes[2] );
 				String provincia = partes[3];
 				String comunidad = partes[4];
-				Municipio muni = new Municipio( codigo, nombre, habitantes, provincia, comunidad );
+				int altitud = Integer.parseInt( partes[5] );
+				int superficie = Integer.parseInt( partes[6] );
+				Municipio muni = new Municipio( codigo, nombre, habitantes, provincia, comunidad, altitud, superficie );
 				add( muni );
 			} catch (IndexOutOfBoundsException | NumberFormatException e) {
 				System.err.println( "Error en lectura de línea " + numLinea );

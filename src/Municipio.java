@@ -6,6 +6,8 @@ public class Municipio implements FilaParaJTable {  // Especializa un comportami
 	private int habitantes;
 	private String provincia;
 	private String autonomia;
+	private int altitud;
+	private int superficie;
 
 	/** Crea un municipio
 	 * @param codigo	Código único del municipio (1-n)
@@ -14,13 +16,15 @@ public class Municipio implements FilaParaJTable {  // Especializa un comportami
 	 * @param provincia	Nombre de su provincia
 	 * @param autonomia	Nombre de su comunidad autónoma
 	 */
-	public Municipio(int codigo, String nombre, int habitantes, String provincia, String autonomia) {
+	public Municipio(int codigo, String nombre, int habitantes, String provincia, String autonomia, int altitud, int superficie) {
 		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.habitantes = habitantes;
 		this.provincia = provincia;
 		this.autonomia = autonomia;
+		this.altitud = altitud;
+		this.superficie = superficie;
 	}
 
 	public int getCodigo() {
@@ -43,6 +47,13 @@ public class Municipio implements FilaParaJTable {  // Especializa un comportami
 		return habitantes;
 	}
 
+	public int getAltitud() {
+		return altitud;
+	}
+	public int getSuperficie() {
+		return superficie;
+	}
+
 	public void setHabitantes(int habitantes) {
 		this.habitantes = habitantes;
 	}
@@ -63,15 +74,22 @@ public class Municipio implements FilaParaJTable {  // Especializa un comportami
 		this.autonomia = autonomia;
 	}
 
+	public void setAltitud(int altitud) {
+		this.altitud = altitud;
+	}
+	public void setSuperficie(int superficie) {
+		this.superficie = superficie;
+	}
+
 	@Override
 	public String toString() {
-		return "[" + codigo + "] " + nombre + ", " + habitantes + " en " + provincia + " (" + autonomia + ")";
+		return "[" + codigo + "] " + nombre + ", " + habitantes + " en " + provincia + " (" + autonomia + ")" + " Altitud: " + altitud + " Superficie: " + superficie;
 	}
 
 	// Implementación de FilaParaJTable
 
-	private static final Class<?>[] CLASES_COLS = { Integer.class, String.class, Integer.class, String.class, String.class };
-	private static final String[] CABECERAS_COLS = { "Código", "Nombre", "Habitantes", "Provincia", "Autonomía" };
+	private static final Class<?>[] CLASES_COLS = { Integer.class, String.class, Integer.class, String.class, String.class, Integer.class, Integer.class };
+	private static final String[] CABECERAS_COLS = { "Código", "Nombre", "Habitantes", "Provincia", "Autonomía", "Altitud", "Superficie" };
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
@@ -101,6 +119,10 @@ public class Municipio implements FilaParaJTable {  // Especializa un comportami
 				return getProvincia();
 			case 4:
 				return getAutonomia();
+				case 5:
+					return getAltitud();
+				case 6:
+					return getSuperficie();
 			default:
 				throw new IndexOutOfBoundsException( "Columna incorrecta: " + columnIndex );
 		}
@@ -124,6 +146,12 @@ public class Municipio implements FilaParaJTable {  // Especializa un comportami
 			case 4:
 				setAutonomia( (String) aValue );
 				break;
+				case 5:
+					setAltitud( (Integer) aValue );
+					break;
+				case 6:
+					setSuperficie( (Integer) aValue );
+					break;
 			default:
 				throw new IndexOutOfBoundsException( "Columna incorrecta: " + columnIndex );
 		}

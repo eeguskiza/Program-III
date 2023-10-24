@@ -1,30 +1,100 @@
-1	Alicante	338577	Alicante	Comunidad Valenciana
-2	Almería	201775	Almería	Andalucía
-3	Badalona	223506	Barcelona	Cataluña
-4	Barcelona	1636193	Barcelona	Cataluña
-5	Bilbao	344127	Vizcaya	Euskadi
-6	Cartagena	216961	Murcia	Murcia
-7	Córdoba	319515	Córdoba	Andalucía
-8	Elche	235580	Alicante	Comunidad Valenciana
-9	Gijón	267706	Asturias	Asturias
-10	Granada	228682	Granada	Andalucía
-11	HospitaletdeLlobregat	265444	Barcelona	Cataluña
-12	JerezdelaFrontera	212730	Cádiz	Andalucía
-13	LaCoruña	244700	LaCoruña	Galicia
-14	LasPalmasdeGranCanaria	378797	LasPalmas	Canarias
-15	Madrid	3280782	Madrid	Madrid
-16	Málaga	579076	Málaga	Andalucía
-17	Móstoles	208761	Madrid	Madrid
-18	Murcia	462979	Murcia	Murcia
-19	Oviedo	215167	Asturias	Asturias
-20	PalmadeMallorca	415940	Baleares	Baleares
-21	Pamplona	203418	Navarra	Navarra
-22	Sabadell	215760	Barcelona	Cataluña
-23	SantaCruzdeTenerife	208688	SantaCruzdeTenerife	Canarias
-24	Sevilla	681998	Sevilla	Andalucía
-25	Tarrasa	224114	Barcelona	Cataluña
-26	Valencia	792492	Valencia	Comunidad Valenciana
-27	Valladolid	295639	Valladolid	Castilla y León
-28	Vigo	292374	Pontevedra	Galicia
-29	Vitoria	253672	Álava	Euskadi
-30	Zaragoza	673010	Zaragoza	Aragón
+1	Alicante	338577	Alicante	Comunidad Valenciana	100	20
+2	Almería	201775	Almería	Andalucía	50	15
+3	Badalona	223506	Barcelona	Cataluña	30	10
+4	Barcelona	1636193	Barcelona	Cataluña	40	30
+5	Bilbao	344127	Vizcaya	Euskadi	60	25
+6	Cartagena	216961	Murcia	Murcia	20	12
+7	Córdoba	319515	Córdoba	Andalucía	45	18
+8	Elche	235580	Alicante	Comunidad Valenciana	55	22
+9	Gijón	267706	Asturias	Asturias	70	28
+10	Granada	228682	Granada	Andalucía	75	35
+11	HospitaletdeLlobregat	265444	Barcelona	Cataluña	22	8
+12	JerezdelaFrontera	212730	Cádiz	Andalucía	32	14
+13	LaCoruña	244700	LaCoruña	Galicia	28	11
+14	LasPalmasdeGranCanaria	378797	LasPalmas	Canarias	10	5
+15	Madrid	3280782	Madrid	Madrid	80	40
+16	Málaga	579076	Málaga	Andalucía	52	20
+17	Móstoles	208761	Madrid	Madrid	36	16
+18	Murcia	462979	Murcia	Murcia	25	9
+19	Oviedo	215167	Asturias	Asturias	65	26
+20	PalmadeMallorca	415940	Baleares	Baleares	15	7
+21	Pamplona	203418	Navarra	Navarra	38	18
+22	Sabadell	215760	Barcelona	Cataluña	33	12
+23	SantaCruzdeTenerife	208688	SantaCruzdeTenerife	Canarias	12	6
+24	Sevilla	681998	Sevilla	Andalucía	48	24
+25	Tarrasa	224114	Barcelona	Cataluña	30	10
+26	Valencia	792492	Valencia	Comunidad Valenciana	62	28
+27	Valladolid	295639	Valladolid	Castilla y León	40	15
+28	Vigo	292374	Pontevedra	Galicia	16	8
+29	Vitoria	253672	Álava	Euskadi	55	20
+30	Zaragoza	673010	Zaragoza	Aragón	42	18
+31	Alcalá de Henares	196888	Comunidad de Madrid	Comunidad de Madrid	28	12
+32	Fuenlabrada	189891	Comunidad de Madrid	Comunidad de Madrid	22	10
+33	San Sebastián	187849	Guipúzcoa	País Vasco	75	30
+34	Leganés	186660	Comunidad de Madrid	Comunidad de Madrid	20	9
+35	Getafe	183218	Comunidad de Madrid	Comunidad de Madrid	32	11
+36	Burgos	173483	Burgos	Castilla y León	45	22
+37	Albacete	172357	Albacete	Castilla-La Mancha	36	14
+38	Castellón de la Plana	171857	Castellón	Comunidad Valenciana	28	9
+39	Santander	171693	Cantabria	Cantabria	10	5
+40	Alcorcón	170296	Comunidad de Madrid	Comunidad de Madrid	20	8
+41	San Cristóbal de La Laguna	157815	Santa Cruz de Tenerife	Canarias	13	6
+42	Marbella	150725	Málaga	Andalucía	45	20
+43	Badajoz	150146	Badajoz	Extremadura	18	8
+44	Logroño	150020	La Rioja	La Rioja	60	25
+45	Salamanca	142412	Salamanca	Castilla y León	30	14
+46	Huelva	141854	Huelva	Andalucía	15	7
+47	Lérida	140797	Lérida	Cataluña	28	11
+48	Dos Hermanas	137561	Sevilla	Andalucía	22	9
+49	Tarragona	134883	Tarragona	Cataluña	10	5
+50	Torrejón de Ardoz	134733	Comunidad de Madrid	Comunidad de Madrid	18	7
+51	Parla	130577	Comunidad de Madrid	Comunidad de Madrid	16	6
+52	Jaén	111980	Jaén	Andalucía	10	4
+53	Lugo	98001	Lugo	Galicia	15	5
+54	Algeciras	118665	Cádiz	Andalucía	8	3
+55	Cáceres	95542	Cáceres	Extremadura	25	10
+56	Girona (Gerona)	101852	Girona	Cataluña	30	12
+57	Reus	107118	Tarragona	Cataluña	20	8
+58	León	124303	León	Castilla y León	40	18
+59	Cádiz	116027	Cádiz	Andalucía	10	5
+60	Mataró	126694	Barcelona	Cataluña	28	11
+61	Alcobendas	115769	Comunidad de Madrid	Comunidad de Madrid	22	9
+62	Almería	197601	Almería	Andalucía	50	15
+63	Telde	102656	Las Palmas	Canarias	12	7
+64	Baracaldo	99631	Bizkaia	Euskadi	35	13
+65	Linares	56109	Jaén	Andalucía	18	6
+66	Santa Coloma de Gramenet	119717	Barcelona	Cataluña	30	10
+67	Pontevedra	83039	Pontevedra	Galicia	20	8
+68	Galdakao	29218	Bizkaia	Euskadi	45	18
+69	Ávila	57855	Ávila	Castilla y León	30	14
+70	Cuenca	54678	Cuenca	Castilla-La Mancha	22	9
+71	Ourense	105505	Ourense	Galicia	25	10
+72	El Ferrol	66833	A Coruña	Galicia	15	7
+73	Gandia	74778	Valencia	Comunidad Valenciana	38	16
+74	Alcalá de Guadaíra	75658	Sevilla	Andalucía	20	9
+75	Benidorm	71034	Alicante	Comunidad Valenciana	10	5
+76	La Línea de la Concepción	62863	Cádiz	Andalucía	8	3
+77	Torrevieja	84297	Alicante	Comunidad Valenciana	12	6
+78	Ceuta	84777	Ceuta	Ceuta	5	2
+79	Chiclana de la Frontera	84901	Cádiz	Andalucía	10	4
+80	Ciudad Real	74756	Ciudad Real	Castilla-La Mancha	18	7
+81	Granollers	60180	Barcelona	Cataluña	28	11
+82	Motril	60548	Granada	Andalucía	15	6
+83	Talavera de la Reina	83064	Toledo	Castilla-La Mancha	22	9
+84	Melilla	78897	Melilla	Melilla	5	3
+85	Mérida	58513	Badajoz	Extremadura	20	8
+86	Rubí	75313	Barcelona	Cataluña	18	7
+87	Manresa	76418	Barcelona	Cataluña	22	9
+88	Sanlúcar de Barrameda	67310	Cádiz	Andalucía	10	4
+89	Alcazar de San Juan	31554	Ciudad Real	Castilla-La Mancha	15	6
+90	Pozuelo de Alarcón	85611	Comunidad de Madrid	Comunidad de Madrid	12	5
+91	San Fernando	96486	Cádiz	Andalucía	8	4
+92	Roquetas de Mar	97929	Almería	Andalucía	12	6
+93	Orihuela	76373	Alicante	Comunidad Valenciana	14	7
+94	Puerto de Santa María	87768	Cádiz	Andalucía	8	3
+95	Sagunto	66464	Valencia	Comunidad Valenciana	18	8
+96	Arona	79449	Santa Cruz de Tenerife	Canarias	10	5
+97	Guadalajara	85691	Guadalajara	Castilla-La Mancha	16	7
+98	Cornellá de Llobregat	86861	Barcelona	Cataluña	22	10
+99	Álamo (El)	9090	Comunidad de Madrid	Comunidad de Madrid	5	2
+100	Torremolinos	67559	Málaga	Andalucía	10	4
