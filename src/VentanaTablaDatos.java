@@ -20,6 +20,7 @@ public class VentanaTablaDatos extends JFrame {
 	
 	private JTable tablaDatos;
 	private DataSetMunicipios datosMunis;
+
 	// private DatasetParaJTable modeloDatos;  El propio dataset es también modelo de datos, no hace falta diferenciarlos
 
 	private String autonomiaSeleccionada = "";
@@ -42,7 +43,8 @@ public class VentanaTablaDatos extends JFrame {
 		
 		tablaDatos = new JTable();
 		add( new JScrollPane( tablaDatos ), BorderLayout.CENTER );
-		
+
+
 		JPanel pInferior = new JPanel();
 		JButton bAnyadir = new JButton( "Añadir" );
 		JButton bBorrar = new JButton( "Borrar" );
@@ -108,25 +110,18 @@ public class VentanaTablaDatos extends JFrame {
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) arbol.getLastSelectedPathComponent();
 
-				if (selectedNode != null && selectedNode.isLeaf()) {  // Suponiendo que solo las hojas del árbol son provincias
-					String provinciaSeleccionada = selectedNode.toString();
+				if (selectedNode != null && selectedNode.isLeaf()) {
+					SwingUtilities.invokeLater(() -> {
+						String provinciaSeleccionada = selectedNode.toString();
+						System.out.println("Provincia seleccionada: " + provinciaSeleccionada);
 
-					// Cargar los datos de los municipios para esa provincia.
-					// Parece que necesitas implementar este método
-					List<Municipio> municipios = cargarMunicipios(provinciaSeleccionada);
-
-					// Limpiar datos anteriores en el modelo de la tabla
-					for (int i = datosMunis.getListaMunicipios().size() - 1; i >= 0; i--) {
-						datosMunis.borraFila(i);
-					}
-
-					// Añadir los nuevos municipios al modelo de la tabla
-					for (FilaParaJTable municipio : municipios) {
-						datosMunis.add(municipio);  // Suponiendo que tienes un método add en tu DataSetMunicipios
-					}
+						// Cargar los datos de los municipios para esa provincia.
+						cargarMunicipios(provinciaSeleccionada);
+					});
 				}
 			}
 		});
+
 
 		tablaDatos.setDefaultRenderer(JProgressBar.class, new DefaultTableCellRenderer() {
 			private JProgressBar pbHabs = new JProgressBar(0, 5000000) {
@@ -149,12 +144,22 @@ public class VentanaTablaDatos extends JFrame {
 
 	}
 
-	private List<Municipio> cargarMunicipios(String provinciaSeleccionada) {
+	private void cargarMunicipios(String provinciaSeleccionada) {
 		List<Municipio> municipiosFiltrados = datosMunis.getListaMunicipios().stream()
-				.filter(muni -> muni.getProvincia().equals(provinciaSeleccionada))
+				.filter(muni -> muni.getProvincia().equalsIgnoreCase(provinciaSeleccionada))
 				.collect(Collectors.toList());
 
-		return getMunicipiosOrdenadosPorNombre(municipiosFiltrados);
+		System.out.println("Municipios cargados para " + provinciaSeleccionada + ": " + municipiosFiltrados.size());
+
+		// Limpiar datos anteriores en el modelo de la tabla
+		for (int i = datosMunis.getListaMunicipios().size() - 1; i >= 0; i--) {
+			datosMunis.borraFila(i);
+		}
+
+		// Añadir los nuevos municipios al modelo de la tabla
+		for (Municipio municipio : municipiosFiltrados) {
+			datosMunis.add(municipio);  // Suponiendo que tienes un método add en tu DataSetMunicipios
+		}
 	}
 
 
