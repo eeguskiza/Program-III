@@ -6,6 +6,11 @@ import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.HashMap;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 @SuppressWarnings("serial")
@@ -26,8 +31,11 @@ public class VentanaTablaDatos extends JFrame {
 	private JButton btnInsertar = new JButton("Insertar");
 	private JButton btnBorrar = new JButton("Borrar");
 	private JButton btnOrden = new JButton("Orden"); // Parte inferior
-	
-	public VentanaTablaDatos( JFrame ventOrigen ) {
+
+	private static final int COLUMN_INDEX_OF_POBLACION = 2; // Donde X es el índice correcto de la columna de población
+
+
+	public VentanaTablaDatos(JFrame ventOrigen) {
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 		setSize( 800, 600 );
 		setLocationRelativeTo( null );
@@ -94,6 +102,65 @@ public class VentanaTablaDatos extends JFrame {
 		pnlInferior.add(btnBorrar);
 		pnlInferior.add(btnOrden);
 		add(pnlInferior, BorderLayout.SOUTH);
+
+		arbol.addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) arbol.getLastSelectedPathComponent();
+
+				if (selectedNode != null && selectedNode.isLeaf()) {  // Suponiendo que solo las hojas del árbol son provincias
+					String provinciaSeleccionada = selectedNode.toString();
+
+					// Cargar los datos de los municipios para esa provincia.
+					// Parece que necesitas implementar este método
+					List<Municipio> municipios = cargarMunicipios(provinciaSeleccionada);
+
+					// Limpiar datos anteriores en el modelo de la tabla
+					for (int i = datosMunis.getListaMunicipios().size() - 1; i >= 0; i--) {
+						datosMunis.borraFila(i);
+					}
+
+					// Añadir los nuevos municipios al modelo de la tabla
+					for (FilaParaJTable municipio : municipios) {
+						datosMunis.add(municipio);  // Suponiendo que tienes un método add en tu DataSetMunicipios
+					}
+				}
+			}
+		});
+
+		tablaDatos.setDefaultRenderer(JProgressBar.class, new DefaultTableCellRenderer() {
+			private JProgressBar pbHabs = new JProgressBar(0, 5000000) {
+				protected void paintComponent(java.awt.Graphics g) {
+					super.paintComponent(g);
+					g.setColor(Color.BLACK);
+					g.drawString(getValue() + "", 50, 10);
+				}
+			};
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				if (column == COLUMN_INDEX_OF_POBLACION) {  // Asegúrate de definir COLUMN_INDEX_OF_POBLACION con el índice correcto de la columna
+					pbHabs.setValue((Integer) value);
+					return pbHabs;
+				}
+				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			}
+		});
+
+	}
+
+	private List<Municipio> cargarMunicipios(String provinciaSeleccionada) {
+		List<Municipio> municipiosFiltrados = datosMunis.getListaMunicipios().stream()
+				.filter(muni -> muni.getProvincia().equals(provinciaSeleccionada))
+				.collect(Collectors.toList());
+
+		return getMunicipiosOrdenadosPorNombre(municipiosFiltrados);
+	}
+
+
+	private List<Municipio> getMunicipiosOrdenadosPorNombre(List<Municipio> municipios) {
+		municipios.sort((m1, m2) -> m1.getNombre().compareTo(m2.getNombre()));
+		return municipios;
 	}
 
 	public void setDatos( DataSetMunicipios datosMunis ) {
@@ -234,6 +301,8 @@ public class VentanaTablaDatos extends JFrame {
 		arbol.setModel(modeloArbol);
 		arbol.setEditable(false); // El JTree no es editable
 	}
+
+
 
 
 }

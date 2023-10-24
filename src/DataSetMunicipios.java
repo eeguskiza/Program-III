@@ -4,6 +4,7 @@ import java.util.*;
 /** Permite gestionar datasets de municipios. Cada objeto contiene un dataset de 'n' municipios
  */
 public class DataSetMunicipios extends DatasetParaJTable {
+	private ArrayList<Municipio> listaMunicipios;
 	
 	/** Crea un nuevo dataset de municipios, cargando los datos desde el fichero indicado
 	 * @param nombreFichero	Nombre de fichero o recurso en formato de texto. En cada línea debe incluir los datos de un municipio <br>
@@ -83,5 +84,5 @@ public class DataSetMunicipios extends DatasetParaJTable {
 		}
 		return true;
 	}
-	
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+import javax.swing.table.AbstractTableModel;
 
 /** Clase para cualquier set de datos basado en ArrayList que quiera visualizarse en una JTable con el modelo ModeloJTable
  * @author andoni.eguiluz @ ingenieria.deusto.es
