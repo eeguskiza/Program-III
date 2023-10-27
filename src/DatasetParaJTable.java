@@ -1,138 +1,124 @@
-
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-/** Clase para cualquier set de datos basado en ArrayList que quiera visualizarse en una JTable con el modelo ModeloJTable
- * @author andoni.eguiluz @ ingenieria.deusto.es
+/**
+ * Clase para gestionar un conjunto de datos basado en ArrayList para ser visualizado en una JTable.
+ * El modelo de esta tabla es ModeloJTable.
  */
 public class DatasetParaJTable extends AbstractTableModel implements TableModel {
 
-	// Atributo de datos (genérico para cualquier clase que implemente FilaParaJTable)
+	// Lista para almacenar datos genéricos que implementen FilaParaJTable
 	private List<FilaParaJTable> listaDatos = new ArrayList<FilaParaJTable>();
-	// Atributo con instancia de ejemplo de la que sacar información cuando proceda (aunque el dataset esté vacío)
+
+	// Instancia que sirve de ejemplo para obtener información, aunque la lista esté vacía
 	private FilaParaJTable instanciaEjemplo;
-	// Lista de escuchadores
+
+	// Lista de observadores o listeners que escucharán cambios en el modelo de la tabla
 	private ArrayList<TableModelListener> listaEsc = new ArrayList<>();
 
+	// Constructor que inicializa el dataset con una instancia de ejemplo
 	public DatasetParaJTable( FilaParaJTable instanciaEjemplo ) {
 		this.instanciaEjemplo = instanciaEjemplo;
 		this.listaDatos = new ArrayList<>();
 	}
 
-	// Métodos que delegan en la fila (los sabe cada objeto)
-
+	// Devuelve la clase de la columna especificada
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		return instanciaEjemplo.getColumnClass(columnIndex);
 	}
 
+	// Devuelve el número total de columnas
 	@Override
 	public int getColumnCount() {
 		return instanciaEjemplo.getColumnCount();
 	}
 
-	private final String[] cabeceras = { "Código", "Nombre", "Habitantes", "Provincia", "Autonomía", "Altitud", "Superficie" };
+	// Cabeceras de las columnas
+	private final String[] cabeceras = { "Código", "Nombre", "Habitantes", "Poblacion", "Provincia", "Autonomía", "Altitud", "Superficie" };
+
+	// Devuelve el nombre de la columna especificada
 	@Override
 	public String getColumnName(int columnIndex) {
-		// System.out.println( "getColumnName " + columnIndex );
 		return cabeceras[columnIndex];
 	}
 
-	// Métodos que directamente acceden al dataset
-
+	// Devuelve el número total de filas
 	@Override
 	public int getRowCount() {
 		return listaDatos.size();
 	}
 
+	// Define si una celda es editable o no (en este caso ninguna es editable)
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		// Por defecto suponemos que no son editables
 		return false;
 	}
 
+	// Añade un listener a la lista de escuchadores
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 		listaEsc.add( l );
 	}
 
+	// Elimina un listener de la lista de escuchadores
 	@Override
 	public void removeTableModelListener(TableModelListener l) {
 		listaEsc.remove( l );
 	}
 
-	// Métodos que acceden a métodos del objeto particular
-
+	// Devuelve el valor de una celda específica
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) throws IndexOutOfBoundsException {
+	public Object getValueAt(int rowIndex, int columnIndex) {
 		return listaDatos.get(rowIndex).getValueAt( columnIndex );
 	}
 
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) throws ClassCastException, IndexOutOfBoundsException {
+	// Establece el valor de una celda específica
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		listaDatos.get(rowIndex).setValueAt( aValue, columnIndex );
 	}
 
-	// Métodos propios del modelo
-
-	// Lanza una notificación para que se dispare llamada a los escuchadores de cambios en el modelo
+	// Notifica a todos los escuchadores que hubo un cambio en el modelo de la tabla
 	public void fireTableChanged( TableModelEvent e ) {
 		for (TableModelListener l : listaEsc) {
 			l.tableChanged( e );
 		}
 	}
 
-	/** Borra un elemento dado del dataset
-	 * @param fila	Número de fila (0 a n-1) a borrar
-	 */
-	public void borraFila( int fila ) throws IndexOutOfBoundsException {
+	// Elimina una fila específica del dataset
+	public void borraFila( int fila ) {
 		listaDatos.remove( fila );
-		fireTableChanged( new TableModelEvent( this, fila, listaDatos.size() ));  // Para que detecte el cambio en todas las filas que cambian
+		fireTableChanged( new TableModelEvent( this, fila, listaDatos.size() ));
 	}
 
-	/** Añade un nuevo dato al dataset
-	 * @param fila	Número de fila (0 a n) donde insertar
-	 * @param dato	Dato a insertar en ese punto
-	 */
+	// Añade un nuevo dato en una posición específica del dataset
 	public void anyadeFila( int fila, FilaParaJTable dato ) {
 		listaDatos.add( fila, dato );
-		fireTableChanged( new TableModelEvent( this, fila, listaDatos.size() ) );  // Para que detecte el cambio en todas las filas que cambian
+		fireTableChanged( new TableModelEvent( this, fila, listaDatos.size() ));
 	}
 
-	/** Añade un nuevo dato al dataset, al final
-	 * @param dato	Dato a insertar
-	 */
+	// Añade un nuevo dato al final del dataset
 	public void add( FilaParaJTable dato ) {
 		listaDatos.add( dato );
-		fireTableChanged( new TableModelEvent( this, listaDatos.size()-1, listaDatos.size() ) );  // Para que detecte el cambio en todas las filas que cambian
+		fireTableChanged( new TableModelEvent( this, listaDatos.size()-1, listaDatos.size() ));
 	}
 
-	/** Devuelve la lista de datos
-	 * @return	Lista de datos
-	 */
+	// Devuelve la lista completa de datos
 	public List<? extends FilaParaJTable> getLista() {
 		return listaDatos;
 	}
 
-	/** Devuelve un dato del dataset
-	 * @param fila	Posición del dato (de 0 a n-1)
-	 * @return	Dato situado en esa posición
-	 * @throws IndexOutOfBoundsException	Lanzada si el índice de fila es incorrecto
-	 */
-	public FilaParaJTable get( int fila ) throws IndexOutOfBoundsException {
+	// Devuelve un dato específico del dataset
+	public FilaParaJTable get( int fila ) {
 		return listaDatos.get( fila );
 	}
 
-	/** Devuelve el tamaño del dataset
-	 * @return	Número de elementos actualmente almacenados
-	 */
+	// Devuelve el número total de elementos en el dataset
 	public int size() {
 		return listaDatos.size();
 	}
-
 }

@@ -2,7 +2,7 @@
 2	Almería	201775	Almería	Andalucía	50	15
 3	Badalona	223506	Barcelona	Cataluña	30	10
 4	Barcelona	1636193	Barcelona	Cataluña	40	30
-5	Bilbao	344127	Vizcaya	Euskadi	60	25
+5	Bilbao	344127	Bizkaia	Euskadi	60	25
 6	Cartagena	216961	Murcia	Murcia	20	12
 7	Córdoba	319515	Córdoba	Andalucía	45	18
 8	Elche	235580	Alicante	Comunidad Valenciana	55	22

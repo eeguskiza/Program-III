@@ -29,9 +29,10 @@ public class VentanaTablaDatos extends JFrame {
 	private ArrayList<Municipio> todosLosMunicipios = new ArrayList<>();
 	private String autonomiaSeleccionada = "";
 
+
 	public VentanaTablaDatos( JFrame ventOrigen ) {
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-		setSize( 800, 600 );
+		setSize( 1400, 600 );
 		setLocationRelativeTo( null );
 
 		// Inicializamos el mensaje en la parte superior
@@ -131,6 +132,7 @@ public class VentanaTablaDatos extends JFrame {
 		tablaDatos.setModel(datasetFiltrado); // Asumiendo que tablaDatos es tu JTable
 	}
 
+	//Dato habietantes de la progress bar y onerla en una columna extra
 
 
 	public void setDatos( DataSetMunicipios datosMunis ) throws IOException {
@@ -143,32 +145,46 @@ public class VentanaTablaDatos extends JFrame {
 		col.setMinWidth( 150 );
 		col.setMaxWidth( 150 );
 
-		tablaDatos.setDefaultRenderer( Integer.class, new DefaultTableCellRenderer() {
-			private JProgressBar pbHabs = new JProgressBar( 0, 5000000 ) {
-				protected void paintComponent(java.awt.Graphics g) {
+			tablaDatos.setDefaultRenderer( Integer.class, new DefaultTableCellRenderer() {
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+					if (column == 2) { // Si es la columna de habitantes
+						return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					}
+					return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				}
+			});
+
+		// Renderizador para la columna de la barra de progreso
+		tablaDatos.setDefaultRenderer(JProgressBar.class, new DefaultTableCellRenderer() {
+			private JProgressBar pbHabs = new JProgressBar(50000, 5000000) {
+				@Override
+				protected void paintComponent(Graphics g) {
+					int currentValue = getValue();
+					float percentage = (float) (currentValue - 50000) / (5000000 - 50000);
+
+					// Interpola entre verde y rojo basado en el porcentaje
+					Color interpolatedColor = new Color((int) (255 * percentage), 255 - (int) (255 * percentage), 0);
+					setForeground(interpolatedColor);
+
 					super.paintComponent(g);
-					g.setColor( Color.BLACK );
-					g.drawString( getValue()+"", 50, 10 );
 				}
 			};
+
 			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-														   boolean hasFocus, int row, int column) {
-				// System.out.println( "getTCR " + row + "," + column );
-				if (column==2) {
-					// Si el dato es un Object o String sería esto
-					// int valorCelda = Integer.parseInt( value.toString() );
-					// pbHabs.setValue( valorCelda );
-					// return pbHabs;
-					// Pero si el dato está asegurado ser un Integer se puede castear:
-					pbHabs.setValue( (Integer)value );
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				if (column == 3 && value instanceof Integer) { // Si es la columna de la barra de progreso y el valor es Integer
+					pbHabs.setValue((Integer) value);
+					pbHabs.setStringPainted(false);  // Asegúrate de que no se pinte la cadena en la barra
 					return pbHabs;
 				}
-				JLabel rendPorDefecto = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-				return rendPorDefecto;
+				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			}
-
 		});
+
+
+
+
 
 		tablaDatos.setDefaultRenderer( String.class, new DefaultTableCellRenderer() {
 			@Override
