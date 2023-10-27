@@ -1,36 +1,44 @@
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.ImageIcon;
+
 
 public class Ejercicio06_03 {
-	
+
 	private static JFrame ventana;
 	private static DataSetMunicipios dataset;
 
 	private static VentanaTablaDatos ventanaDatos;
-	
+
 	public static void main(String[] args) {
 		ventana = new JFrame( "Ejercicio 6.3" );
-		ventana.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		ventana.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		ventana.setSize( 200, 200 );
 		ventana.setLocationRelativeTo( null );
-		ventana.setSize( 200, 80 );
 
-		JButton bCargaMunicipios = new JButton( "Cargar municipios" );
+		JButton bCargaMunicipios = new JButton( "" );
+
+		// Establecer el ícono del botón
+		ImageIcon iconOriginal = new ImageIcon("upload.png");
+		Image imgEscalada = iconOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		bCargaMunicipios.setIcon(new ImageIcon(imgEscalada));
 		ventana.add( bCargaMunicipios );
-		
+
 		bCargaMunicipios.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cargaMunicipios();
 			}
 		});
-		
+
 		ventana.setVisible( true );
 	}
-	
+
 	private static void cargaMunicipios() {
 		try {
 			dataset = new DataSetMunicipios( "municipios200k.txt" );
@@ -46,5 +54,5 @@ public class Ejercicio06_03 {
 			System.err.println( "Error en carga de municipios" );
 		}
 	}
-	
+
 }
