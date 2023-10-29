@@ -1,4 +1,4 @@
-1	Alicante	338577	Alicante	Comunidad Valenciana	100	20
+1	Alicante	5	Alicante	Comunidad Valenciana	100	20
 2	Almería	201775	Almería	Andalucía	50	15
 3	Badalona	223506	Barcelona	Cataluña	30	10
 4	Barcelona	1636193	Barcelona	Cataluña	40	30

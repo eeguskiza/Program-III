@@ -93,26 +93,84 @@ public class VentanaTablaDatos extends JFrame {
 			}
 		});
 
-		bBorrar.addActionListener( new ActionListener() {
+		bBorrar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int filaSel = tablaDatos.getSelectedRow();
 				if (filaSel >= 0) {
-					datosMunis.borraFila( filaSel );
+					int confirmacion = JOptionPane.showConfirmDialog(VentanaTablaDatos.this, "¿Estás seguro de que deseas borrar este municipio?", "Confirmación de borrado", JOptionPane.YES_NO_OPTION);
+					if (confirmacion == JOptionPane.YES_OPTION) {
+						datosMunis.borraFila(filaSel);
+					}
 				}
 			}
 		});
 
-		bAnyadir.addActionListener( new ActionListener() {
+
+		bAnyadir.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int filaSel = tablaDatos.getSelectedRow();
-				if (filaSel>=0) {
-					datosMunis.anyadeFila( filaSel, new Municipio( datosMunis.getListaMunicipios().size()+1, "Nombre", 0, "Provincia", "Autonomía" , 0, 0) );
+				if (filaSel >= 0) {
+					Municipio municipioSeleccionado = datosMunis.getListaMunicipios().get(filaSel);
+					String provinciaSeleccionada = municipioSeleccionado.getProvincia();
+					String autonomiaSeleccionada = municipioSeleccionado.getAutonomia();
+
+					// Crea un nuevo municipio con los valores deseados
+					Municipio nuevoMunicipio = new Municipio(
+							datosMunis.getListaMunicipios().size() + 1,
+							"",
+							50000,
+							provinciaSeleccionada,
+							autonomiaSeleccionada,
+							0,
+							0
+					);
+
+					// Agrega el nuevo municipio al final del dataset
+					datosMunis.anyadir(nuevoMunicipio);
+
+					// Actualiza el árbol para reflejar los cambios
+					cargarArbol();
 				}
 			}
 		});
 
+		bOrden.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (autonomiaSeleccionada.isEmpty()) {
+					lblMensaje.setText("Selecciona una provincia en el árbol antes de ordenar.");
+				} else {
+					// Obtén la lista de municipios de la provincia seleccionada
+					List<Municipio> municipiosProvinciaSeleccionada = datosMunis.getListaMunicipios()
+							.stream()
+							.filter(municipio -> municipio.getProvincia().equals(autonomiaSeleccionada))
+							.collect(Collectors.toList());
+
+					// Ordena la lista de municipios según la columna seleccionada
+					if (tablaDatos.getColumnName(tablaDatos.getSelectedColumn()).equals("Nombre")) {
+						ordenarMunicipiosPorNombre(municipiosProvinciaSeleccionada);
+					} else if (tablaDatos.getColumnName(tablaDatos.getSelectedColumn()).equals("Habitantes")) {
+						ordenarMunicipiosPorHabitantesDescendente(municipiosProvinciaSeleccionada);
+					}
+
+					// Actualiza la tabla con la lista ordenada
+					cargarMunicipios(autonomiaSeleccionada);
+				}
+			}
+		});
+
+
+
+	}
+
+	private void ordenarMunicipiosPorNombre(List<Municipio> municipios) {
+		municipios.sort(Comparator.comparing(Municipio::getNombre));
+	}
+
+	private void ordenarMunicipiosPorHabitantesDescendente(List<Municipio> municipios) {
+		municipios.sort(Comparator.comparingInt(Municipio::getHabitantes).reversed());
 	}
 
 	//Haz que al seleccionar una provincia en el árbol se cargue el modelo de la tabla central con los datos de todos los municipios de esa provincia, en orden alfabético de nombre.
@@ -268,16 +326,12 @@ public class VentanaTablaDatos extends JFrame {
 							int poblacionSeleccionada = municipioSeleccionado.getHabitantes();
 
 							for (int fila = 0; fila < tablaDatos.getRowCount(); fila++) {
-								int poblacion = (int) tablaDatos.getValueAt(fila, 3);  // Suponiendo que la población está en la columna 3
+								int poblacion = (int) tablaDatos.getValueAt(fila, 2);
 
 								if (poblacion > poblacionSeleccionada) {
 									tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.RED);
-									tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.RED);
-									// ... Repite para otras columnas que desees colorear en rojo
 								} else if (poblacion < poblacionSeleccionada) {
 									tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.GREEN);
-									tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.GREEN);
-									// ... Repite para otras columnas que desees colorear en verde
 								}
 							}
 						}
@@ -287,7 +341,6 @@ public class VentanaTablaDatos extends JFrame {
 						for (int fila = 0; fila < tablaDatos.getRowCount(); fila++) {
 							tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.WHITE);
 							tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.WHITE);
-							// ... Repite para otras columnas que desees volver a blanco
 						}
 						resaltado = false;
 					}
