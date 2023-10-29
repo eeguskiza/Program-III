@@ -139,6 +139,8 @@ public class VentanaTablaDatos extends JFrame {
 		bOrden.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Botón de Orden presionado");
+				System.out.println("Autonomía seleccionada: " + autonomiaSeleccionada);
 				if (autonomiaSeleccionada.isEmpty()) {
 					lblMensaje.setText("Selecciona una provincia en el árbol antes de ordenar.");
 				} else {
