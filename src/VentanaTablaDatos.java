@@ -140,28 +140,32 @@ public class VentanaTablaDatos extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Botón de Orden presionado");
-				System.out.println("Autonomía seleccionada: " + autonomiaSeleccionada);
-				if (autonomiaSeleccionada.isEmpty()) {
+				System.out.println("Provincia seleccionada: " + autonomiaSeleccionada); // Change this to provinciaSeleccionada or similar if needed
+				if (autonomiaSeleccionada.isEmpty()) { // This should also be changed if the variable name is changed
 					lblMensaje.setText("Selecciona una provincia en el árbol antes de ordenar.");
 				} else {
-					// Obtén la lista de municipios de la provincia seleccionada
+					String columnName = tablaDatos.getColumnName(tablaDatos.getSelectedColumn());
 					List<Municipio> municipiosProvinciaSeleccionada = datosMunis.getListaMunicipios()
 							.stream()
 							.filter(municipio -> municipio.getProvincia().equals(autonomiaSeleccionada))
 							.collect(Collectors.toList());
 
-					// Ordena la lista de municipios según la columna seleccionada
-					if (tablaDatos.getColumnName(tablaDatos.getSelectedColumn()).equals("Nombre")) {
+					if (columnName.equals("Nombre")) {
 						ordenarMunicipiosPorNombre(municipiosProvinciaSeleccionada);
-					} else if (tablaDatos.getColumnName(tablaDatos.getSelectedColumn()).equals("Habitantes")) {
+					} else if (columnName.equals("Habitantes")) {
 						ordenarMunicipiosPorHabitantesDescendente(municipiosProvinciaSeleccionada);
 					}
 
-					// Actualiza la tabla con la lista ordenada
-					cargarMunicipios(autonomiaSeleccionada);
+					// Refresh the table data after sorting
+					DataSetMunicipios datasetFiltrado = new DataSetMunicipios();
+					for (Municipio municipio : municipiosProvinciaSeleccionada) {
+						datasetFiltrado.anyadir(municipio);
+					}
+					tablaDatos.setModel(datasetFiltrado);
 				}
 			}
 		});
+
 
 
 
