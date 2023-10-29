@@ -93,10 +93,7 @@ public class DataSetMunicipios extends DatasetParaJTable {
 	// Queremos que las celdas sean editables excepto el código
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		if (columnIndex == 0) {
-			return false;
-		}
-		return true;
+		return columnIndex == 1 || columnIndex == 2;
 	}
 
 }
