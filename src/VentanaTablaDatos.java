@@ -356,7 +356,6 @@ public class VentanaTablaDatos extends JFrame {
 		// Nodo raíz
 		DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("España");
 
-
 		// Hashmaps para gestionar nodos de comunidades y provincias
 		HashMap<String, DefaultMutableTreeNode> comunidades = new HashMap<>();
 		HashMap<String, DefaultMutableTreeNode> provincias = new HashMap<>();
@@ -385,6 +384,7 @@ public class VentanaTablaDatos extends JFrame {
 		DefaultTreeModel modeloArbol = new DefaultTreeModel(raiz);
 		arbolDatos.setModel(modeloArbol);
 		arbolDatos.setEditable(false); // El JTree no es editable
+		arbolDatos.setCellRenderer(new RendererTree());
 	}
 
 }
