@@ -384,7 +384,10 @@ public class VentanaTablaDatos extends JFrame {
 		// Crear y asignar el modelo al JTree
 		DefaultTreeModel modeloArbol = new DefaultTreeModel(raiz);
 		arbolDatos.setModel(modeloArbol);
-		arbolDatos.setCellRenderer(new RendererTree(poblacionPorProvincia)); // Cambiar el renderer
-		arbolDatos.setEditable(false); // El JTree no es editable
+		arbolDatos.setEditable(false);
+		arbolDatos.setCellRenderer(new RendererTree(poblacionPorProvincia));
+		arbolDatos.revalidate();
+		arbolDatos.repaint();
+
 	}
 }
