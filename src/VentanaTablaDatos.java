@@ -28,6 +28,7 @@ public class VentanaTablaDatos extends JFrame {
 	private JPanel pnlVisualizacion;
 	private ArrayList<Municipio> todosLosMunicipios = new ArrayList<>();
 	private String autonomiaSeleccionada = "";
+	private boolean resaltado = false;
 
 
 	public VentanaTablaDatos( JFrame ventOrigen ) {
@@ -260,33 +261,40 @@ public class VentanaTablaDatos extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e)) {
-					int filaSeleccionada = tablaDatos.rowAtPoint(e.getPoint());
-					if (filaSeleccionada >= 0) {
-						// Obtener el municipio y su población
-						Municipio municipioSeleccionado = datosMunis.getListaMunicipios().get(filaSeleccionada);
-						int poblacionSeleccionada = municipioSeleccionado.getHabitantes();
+					if (!resaltado) {
+						int filaSeleccionada = tablaDatos.rowAtPoint(e.getPoint());
+						if (filaSeleccionada >= 0) {
+							Municipio municipioSeleccionado = datosMunis.getListaMunicipios().get(filaSeleccionada);
+							int poblacionSeleccionada = municipioSeleccionado.getHabitantes();
 
-						// Recorrer todas las filas de la tabla y cambiar el color de fondo
-						for (int fila = 0; fila < tablaDatos.getRowCount(); fila++) {
-							int poblacion = (int) tablaDatos.getValueAt(fila, 3); // Suponiendo que la población está en la columna 3
+							for (int fila = 0; fila < tablaDatos.getRowCount(); fila++) {
+								int poblacion = (int) tablaDatos.getValueAt(fila, 3);  // Suponiendo que la población está en la columna 3
 
-							if (poblacion > poblacionSeleccionada) {
-								// Población mayor, fondo rojo
-								tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.RED);
-								tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.RED);
-								// ... Repite para otras columnas que desees colorear en rojo
-							} else if (poblacion < poblacionSeleccionada) {
-								// Población menor, fondo verde
-								tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.GREEN);
-								tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.GREEN);
-								// ... Repite para otras columnas que desees colorear en verde
+								if (poblacion > poblacionSeleccionada) {
+									tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.RED);
+									tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.RED);
+									// ... Repite para otras columnas que desees colorear en rojo
+								} else if (poblacion < poblacionSeleccionada) {
+									tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.GREEN);
+									tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.GREEN);
+									// ... Repite para otras columnas que desees colorear en verde
+								}
 							}
 						}
+						resaltado = true;
+					} else {
+						// Si ya está resaltado, quitamos el resaltado
+						for (int fila = 0; fila < tablaDatos.getRowCount(); fila++) {
+							tablaDatos.getCellRenderer(fila, 0).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 0).setBackground(Color.WHITE);
+							tablaDatos.getCellRenderer(fila, 1).getTableCellRendererComponent(tablaDatos, null, false, false, fila, 1).setBackground(Color.WHITE);
+							// ... Repite para otras columnas que desees volver a blanco
+						}
+						resaltado = false;
 					}
+					tablaDatos.repaint();  // Refrescar la tabla para ver los cambios
 				}
 			}
 		});
-
 	}
 
 	private void cargarArbol() {
