@@ -2,8 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.event.TreeSelectionEvent;
@@ -13,7 +12,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
@@ -31,10 +29,10 @@ public class VentanaTablaDatos extends JFrame {
 	private boolean resaltado = false;
 
 
-	public VentanaTablaDatos( JFrame ventOrigen ) {
-		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-		setSize( 1400, 600 );
-		setLocationRelativeTo( null );
+	public VentanaTablaDatos(JFrame ventOrigen) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setSize(1400, 600);
+		setLocationRelativeTo(null);
 
 		// Inicializamos el mensaje en la parte superior
 		lblMensaje = new JLabel("");
@@ -46,7 +44,7 @@ public class VentanaTablaDatos extends JFrame {
 		add(scrollArbol, BorderLayout.WEST);
 
 		tablaDatos = new JTable();
-		JScrollPane scrollTabla = new JScrollPane( tablaDatos );
+		JScrollPane scrollTabla = new JScrollPane(tablaDatos);
 		add(scrollTabla, BorderLayout.CENTER);
 
 		// Panel de visualización a la derecha
@@ -54,9 +52,9 @@ public class VentanaTablaDatos extends JFrame {
 		add(pnlVisualizacion, BorderLayout.EAST);
 
 		JPanel pInferior = new JPanel();
-		JButton bAnyadir = new JButton( "Añadir" );
-		JButton bBorrar = new JButton( "Borrar" );
-		JButton bOrden = new JButton( "Orden" );  // Nuevo botón
+		JButton bAnyadir = new JButton("Añadir");
+		JButton bBorrar = new JButton("Borrar");
+		JButton bOrden = new JButton("Orden");  // Nuevo botón
 		pInferior.add(bAnyadir);
 		pInferior.add(bBorrar);
 		pInferior.add(bOrden);  // Agregamos el nuevo botón
@@ -82,14 +80,15 @@ public class VentanaTablaDatos extends JFrame {
 			}
 		});
 
-		this.addWindowListener( new WindowAdapter() {
+		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
-				ventOrigen.setVisible( false );
+				ventOrigen.setVisible(false);
 			}
+
 			@Override
 			public void windowClosed(WindowEvent e) {
-				ventOrigen.setVisible( true );
+				ventOrigen.setVisible(true);
 			}
 		});
 
@@ -167,8 +166,6 @@ public class VentanaTablaDatos extends JFrame {
 		});
 
 
-
-
 	}
 
 	private void ordenarMunicipiosPorNombre(List<Municipio> municipios) {
@@ -200,25 +197,25 @@ public class VentanaTablaDatos extends JFrame {
 	//Dato habietantes de la progress bar y onerla en una columna extra
 
 
-	public void setDatos( DataSetMunicipios datosMunis ) throws IOException {
+	public void setDatos(DataSetMunicipios datosMunis) throws IOException {
 		this.datosMunis = datosMunis;
-		tablaDatos.setModel( datosMunis );
+		tablaDatos.setModel(datosMunis);
 
-		TableColumn col = tablaDatos.getColumnModel().getColumn( 0 );
-		col.setMaxWidth( 50 );
+		TableColumn col = tablaDatos.getColumnModel().getColumn(0);
+		col.setMaxWidth(50);
 		col = tablaDatos.getColumnModel().getColumn(2);
-		col.setMinWidth( 150 );
-		col.setMaxWidth( 150 );
+		col.setMinWidth(150);
+		col.setMaxWidth(150);
 
-			tablaDatos.setDefaultRenderer( Integer.class, new DefaultTableCellRenderer() {
-				@Override
-				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-					if (column == 2) { // Si es la columna de habitantes
-						return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-					}
+		tablaDatos.setDefaultRenderer(Integer.class, new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				if (column == 2) { // Si es la columna de habitantes
 					return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				}
-			});
+				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			}
+		});
 
 		// Renderizador para la columna de la barra de progreso
 		tablaDatos.setDefaultRenderer(JProgressBar.class, new DefaultTableCellRenderer() {
@@ -248,46 +245,43 @@ public class VentanaTablaDatos extends JFrame {
 		});
 
 
-
-
-
-		tablaDatos.setDefaultRenderer( String.class, new DefaultTableCellRenderer() {
+		tablaDatos.setDefaultRenderer(String.class, new DefaultTableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column );
-				c.setBackground( Color.WHITE );
+				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				c.setBackground(Color.WHITE);
 				if (isSelected) {
-					c.setBackground( Color.LIGHT_GRAY );
+					c.setBackground(Color.LIGHT_GRAY);
 				}
-				if (column==COL_AUTONOMIA) {
-					if (autonomiaSeleccionada.equals( (String)value )) {
-						c.setBackground( Color.CYAN );
+				if (column == COL_AUTONOMIA) {
+					if (autonomiaSeleccionada.equals((String) value)) {
+						c.setBackground(Color.CYAN);
 					}
 				}
 				return c;
 			}
-		} );
+		});
 
-		tablaDatos.addMouseMotionListener( new MouseMotionAdapter() {
+		tablaDatos.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				int filaEnTabla = tablaDatos.rowAtPoint( e.getPoint() );
-				int colEnTabla = tablaDatos.columnAtPoint( e.getPoint() );
+				int filaEnTabla = tablaDatos.rowAtPoint(e.getPoint());
+				int colEnTabla = tablaDatos.columnAtPoint(e.getPoint());
 				if (colEnTabla == 2) {
 					int numHabs = datosMunis.getListaMunicipios().get(filaEnTabla).getHabitantes();
-					tablaDatos.setToolTipText( String.format( "Población: %,d", numHabs ) );
+					tablaDatos.setToolTipText(String.format("Población: %,d", numHabs));
 				} else {
-					tablaDatos.setToolTipText( null );  // Desactiva
+					tablaDatos.setToolTipText(null);  // Desactiva
 				}
 			}
 		});
 
-		tablaDatos.addMouseListener( new MouseAdapter() {
+		tablaDatos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int filaEnTabla = tablaDatos.rowAtPoint( e.getPoint() );
-				int colEnTabla = tablaDatos.columnAtPoint( e.getPoint() );
-				if (colEnTabla == COL_AUTONOMIA && filaEnTabla>=0) {
+				int filaEnTabla = tablaDatos.rowAtPoint(e.getPoint());
+				int colEnTabla = tablaDatos.columnAtPoint(e.getPoint());
+				if (colEnTabla == COL_AUTONOMIA && filaEnTabla >= 0) {
 					autonomiaSeleccionada = datosMunis.getListaMunicipios().get(filaEnTabla).getAutonomia();
 				} else {
 					autonomiaSeleccionada = "";
@@ -296,26 +290,28 @@ public class VentanaTablaDatos extends JFrame {
 			}
 		});
 
-		tablaDatos.setDefaultEditor( Integer.class, new DefaultCellEditor( new JTextField() ) {
-			SpinnerNumberModel mSpinner = new SpinnerNumberModel( 200000, 200000, 5000000, 1000 );
-			JSpinner spinner = new JSpinner( mSpinner );
+		tablaDatos.setDefaultEditor(Integer.class, new DefaultCellEditor(new JTextField()) {
+			SpinnerNumberModel mSpinner = new SpinnerNumberModel(200000, 200000, 5000000, 1000);
+			JSpinner spinner = new JSpinner(mSpinner);
 			boolean lanzadoSpinner;
+
 			@Override
 			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) { // Componente que se pone en la tabla al editar una celda
 				if (column != 2) {
 					lanzadoSpinner = false;
 					return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 				}
-				mSpinner.setValue( (Integer) value );
+				mSpinner.setValue((Integer) value);
 				lanzadoSpinner = true;
 				return spinner;
 			}
+
 			@Override
 			public Object getCellEditorValue() { // Valor que se retorna al acabar la edición
 				if (lanzadoSpinner) {
 					return spinner.getValue();
 				} else {
-					return Integer.parseInt( super.getCellEditorValue().toString() );
+					return Integer.parseInt(super.getCellEditorValue().toString());
 				}
 			}
 		});
@@ -363,7 +359,7 @@ public class VentanaTablaDatos extends JFrame {
 		// Hashmaps para gestionar nodos de comunidades y provincias
 		HashMap<String, DefaultMutableTreeNode> comunidades = new HashMap<>();
 		HashMap<String, DefaultMutableTreeNode> provincias = new HashMap<>();
-
+		HashMap<String, Integer> poblacionPorProvincia = new HashMap<>();
 
 		for (Municipio muni : datosMunis.getListaMunicipios()) {
 			// Añadir nodo de comunidad si no existe
@@ -373,7 +369,6 @@ public class VentanaTablaDatos extends JFrame {
 				raiz.add(nodoComunidad);
 			}
 
-
 			// Añadir nodo de provincia si no existe
 			String claveProvincia = muni.getAutonomia() + "-" + muni.getProvincia();
 			if (!provincias.containsKey(claveProvincia)) {
@@ -381,14 +376,15 @@ public class VentanaTablaDatos extends JFrame {
 				provincias.put(claveProvincia, nodoProvincia);
 				comunidades.get(muni.getAutonomia()).add(nodoProvincia);
 			}
+
+			// Actualizar la población de la provincia
+			poblacionPorProvincia.merge(muni.getProvincia(), muni.getHabitantes(), Integer::sum);
 		}
 
-
-		// Asignar el modelo al JTree
+		// Crear y asignar el modelo al JTree
 		DefaultTreeModel modeloArbol = new DefaultTreeModel(raiz);
 		arbolDatos.setModel(modeloArbol);
+		arbolDatos.setCellRenderer(new RendererTree(poblacionPorProvincia)); // Cambiar el renderer
 		arbolDatos.setEditable(false); // El JTree no es editable
-		arbolDatos.setCellRenderer(new RendererTree());
 	}
-
 }

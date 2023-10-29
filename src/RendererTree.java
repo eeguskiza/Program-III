@@ -1,43 +1,31 @@
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
+import java.util.Map;
+
+
+
 
 public class RendererTree extends DefaultTreeCellRenderer {
-    private JPanel panel;
-    private JLabel label;
-    private JProgressBar progressBar;
+    private Map<String, Integer> poblacionPorProvincia;
 
-    public RendererTree() {
-        // Inicializamos los componentes
-        panel = new JPanel(new BorderLayout());
-        label = new JLabel();
-        progressBar = new JProgressBar(0, 100);
-        progressBar.setStringPainted(true); // Para que muestre texto (porcentaje)
-
-        panel.add(label, BorderLayout.WEST);
-        panel.add(progressBar, BorderLayout.EAST);
+    public RendererTree(Map<String, Integer> poblacionPorProvincia) {
+        this.poblacionPorProvincia = poblacionPorProvincia;
     }
 
     @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        Component renderer = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-        String text = value.toString();
-        String[] parts = text.split(" ");
-        if (parts.length > 1 && parts[1].contains("/")) {
-            String[] populations = parts[1].replace("(", "").replace(")", "").split("/");
-            int currentPopulation = Integer.parseInt(populations[0]);
-            int totalPopulation = Integer.parseInt(populations[1]);
-
-            int percentage = (int) (((double) currentPopulation / totalPopulation) * 100);
-            progressBar.setValue(percentage);
-            progressBar.setString(percentage + "%");
-
-            label.setText(parts[0]);
-            return panel;
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+        if (c instanceof JLabel) {
+            JLabel label = (JLabel) c;
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+            if (node.isLeaf()) {
+                String provincia = value.toString();
+                int poblacion = poblacionPorProvincia.getOrDefault(provincia, 0);
+                label.setText(provincia + " (" + poblacion + ")");
+            }
         }
-
-        return renderer;
+        return c;
     }
 }
-
